@@ -1,5 +1,7 @@
 #include <print>
+#include "board.hpp"
 
 int main(){
-  std::println("hello");
+    Board board = Board();
+    std::cout << board;
 }

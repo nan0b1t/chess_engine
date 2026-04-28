@@ -10,6 +10,8 @@ struct Board {
 
     bool whiteToMove = true;
     bool canCastleWk, canCastleWq, CanCastleBk, canCastleBq;
+    int fiftyMoveRuleCounter = 0;
+    
     int enPassantSquare[2] = {-1, -1};
 
     Board();

@@ -1,5 +1,6 @@
 #pragma once
 #include "move.hpp"
+#include "board.hpp"
 
-Move* getPsuedoMoves(Move* moves);
-Move* getLegalMoves(Move* moves);
+Move* getPsuedoMoves(const Board& board, Move* moves);
+Move* getLegalMoves(const Board& board, Move* moves);

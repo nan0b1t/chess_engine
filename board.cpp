@@ -1,6 +1,5 @@
 #include "board.hpp"
 #include <iostream>
-#include <stdexcept>
 #include <string>
 
 Board::Board() {
@@ -20,20 +19,6 @@ Board::Board() {
     }
 }
 
-// returns true for white false for black
-bool Board::getColor(Piece piece) const{
-    if (piece == Piece::EMPTY) throw std::invalid_argument("Empty squares not allowed!");
-
-    return (
-        !(piece == Piece::B_BISHOP ||
-          piece == Piece::B_KING   ||
-          piece == Piece::B_KNIGHT ||
-          piece == Piece::B_PAWN   ||
-          piece == Piece::B_QUEEN  ||
-          piece == Piece::B_ROOK
-        )
-    );
-}
 
 std::string Board::pieceToStr(Piece piece) const {
     if (piece == Piece::EMPTY) return "  \x1b[0m";
@@ -50,7 +35,7 @@ std::string Board::pieceToStr(Piece piece) const {
         case Piece::EMPTY:                          result.append("this should never happen"); break;
     }
 
-    if (getColor(piece)) {
+    if (isWhite(piece)) {
         result.insert(0, "\x1b[97m"); // the ansi escape for white
     } else {
         result.insert(0, "\x1b[30m"); // ansi escape for dark black

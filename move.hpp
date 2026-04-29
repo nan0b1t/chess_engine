@@ -13,3 +13,4 @@ struct Move {
     bool isEnPassant;
     bool isCastling;
 };
+

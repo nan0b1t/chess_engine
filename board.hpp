@@ -3,7 +3,8 @@
 #include <iostream>
 #include <string>
 #include "piece.hpp"
-
+#include "move.hpp"
+#include <vector>
 
 struct Board {
     Piece chessboard[8][8] = {}; // will upgrade to bitboard later
@@ -11,13 +12,16 @@ struct Board {
     bool whiteToMove = true;
     bool canCastleWk, canCastleWq, CanCastleBk, canCastleBq;
     int fiftyMoveRuleCounter = 0;
-    
+
+    Move* moveBuffer;
     int enPassantSquare[2] = {-1, -1};
 
     Board();
-    friend std::ostream& operator<<(std::ostream& os, const Board& obj);
+    ~Board();
+    friend std::ostream& operator<<(std::ostream& os, const Board& obj); // so i can cout it
     void display();
-    
+    std::vector<Move> getPsuedoMoves(); // for user friendly stuff, not high-performance internal enigne calculation
+
     private:
         std::string pieceToStr(Piece piece) const;
         /**

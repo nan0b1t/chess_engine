@@ -1,8 +1,9 @@
 #include "piece.hpp"
 #include "move.hpp"
 #include "display.hpp"
+#include <string>
 
-std::string move_to_algebraic(const Move& move) {
+std::string moveToAlgebraic(const Move& move) {
     if (move.isCastling) {
         // Kingside castling moves to g-file (6), queenside to c-file (2)
         return (move.to[1] == 6) ? "O-O" : "O-O-O";

@@ -1,5 +1,8 @@
 #pragma once
-#include <stdexcept>
+#include "move.hpp"
+#include <string>
+
+struct Move;
 
 enum class Piece{
     EMPTY,
@@ -16,6 +19,8 @@ enum class Piece{
     B_QUEEN,
     B_KING
 };
+
+std::string moveToAlgebraic(const Move& move);
 
 inline bool isPawn(Piece piece) {
     return (piece == Piece::W_PAWN || piece == Piece::B_PAWN);
@@ -41,7 +46,7 @@ inline bool isKing(Piece piece) {
 }
 
 inline bool isWhite(Piece piece) {
-    if (piece == Piece::EMPTY) throw std::invalid_argument("Empty squares not allowed!");
+    //if (piece == Piece::EMPTY) throw std::invalid_argument("Empty squares not allowed!");
 
     return (
         !(piece == Piece::B_BISHOP ||

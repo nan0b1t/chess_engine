@@ -1,4 +1,6 @@
 #include "display.hpp"
+#include <string>
+#include "piece.hpp"
 
 std::string pieceToStr(Piece piece) {
     if (piece == Piece::EMPTY) return "  \x1b[0m";

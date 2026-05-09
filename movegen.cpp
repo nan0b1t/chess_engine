@@ -4,48 +4,7 @@
 #include "config.hpp"
 #include "move.hpp"
 #include "piece.hpp"
-
-enum class RawPiece { PAWN,
-    ROOK,
-    BISHOP,
-    KING,
-    QUEEN,
-    KNIGHT };
-
-Piece getFullPiece(RawPiece raw, bool isWhite)
-{
-    if (isWhite) {
-        switch (raw) {
-        case RawPiece::PAWN:
-            return Piece::W_PAWN;
-        case RawPiece::ROOK:
-            return Piece::W_ROOK;
-        case RawPiece::BISHOP:
-            return Piece::W_BISHOP;
-        case RawPiece::KING:
-            return Piece::W_KING;
-        case RawPiece::QUEEN:
-            return Piece::W_QUEEN;
-        case RawPiece::KNIGHT:
-            return Piece::W_KNIGHT;
-        }
-    } else {
-        switch (raw) {
-        case RawPiece::PAWN:
-            return Piece::B_PAWN;
-        case RawPiece::ROOK:
-            return Piece::B_ROOK;
-        case RawPiece::BISHOP:
-            return Piece::B_BISHOP;
-        case RawPiece::KING:
-            return Piece::B_KING;
-        case RawPiece::QUEEN:
-            return Piece::B_QUEEN;
-        case RawPiece::KNIGHT:
-            return Piece::B_KNIGHT;
-        }
-    }
-}
+#include "rawpiece.hpp"
 
 void addPromotionMoves(Move** moves, int fromI, int fromJ, int toI, int toJ, Piece piece, Piece captured, bool isWhite, bool isEnPassant)
 {
@@ -65,9 +24,9 @@ void addPromotionMoves(Move** moves, int fromI, int fromJ, int toI, int toJ, Pie
     }
 }
 
-bool isCapturable(Piece p1, Piece p2) { return (isWhite(p1) != isWhite(p2)); }
+bool isCapturable(Piece p1, Piece p2) { return (isWhite(p1) != isWhite(p2)) && (!(p1 == Piece::EMPTY) && (p2 == Piece::EMPTY)); }
 
-Move* getPsuedoMoves(const Board& board, Move* moves)
+Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
 {
     for (int i = 0; i < BOARD_SIZE; i++) {
         for (int j = 0; j < BOARD_SIZE; j++) {
@@ -76,6 +35,8 @@ Move* getPsuedoMoves(const Board& board, Move* moves)
             if (piece == Piece::EMPTY) {
                 continue;
             }
+
+            if (whiteToPlay == isWhite(piece)) continue;
 
             if (isPawn(piece)) {
                 int forwardIndex;
@@ -122,7 +83,7 @@ Move* getPsuedoMoves(const Board& board, Move* moves)
 
                     if (forwardIndex == 0 || forwardIndex == 7) {
                         addPromotionMoves(&moves, i, j, forwardIndex, j - 1, piece, board.chessboard[forwardIndex][j - 1], isWhite(piece), false);
-
+                    } else {
                         *moves = { .from = { i, j },
                             .to = { forwardIndex, j - 1 },
                             .piece = piece,
@@ -132,9 +93,14 @@ Move* getPsuedoMoves(const Board& board, Move* moves)
                             .isCastling = false };
                         moves++;
                     }
+                }
 
-                    // check right capture
-                    if (j < 7 && i != 7 && i != 0 && isCapturable(board.chessboard[forwardIndex][j + 1], piece)) {
+                // check right capture
+                if (j < 7 && i != 7 && i != 0 && isCapturable(board.chessboard[forwardIndex][j + 1], piece)) {
+
+                    if (forwardIndex == 0 || forwardIndex == 7) {
+                        addPromotionMoves(&moves, i, j, forwardIndex, j + 1, piece, board.chessboard[forwardIndex][j + 1], isWhite(piece), false);
+                    } else {
                         *moves = { .from = { i, j },
                             .to = { forwardIndex, j + 1 },
                             .piece = piece,
@@ -144,18 +110,18 @@ Move* getPsuedoMoves(const Board& board, Move* moves)
                             .isCastling = false };
                         moves++;
                     }
+                }
 
-                    if (board.enPassantSquare[0] == i && ((j == board.enPassantSquare[1] - 1) || (j == board.enPassantSquare[1] + 1))) {
-                        *moves = { .from = { i, j },
-                            .to = { forwardIndex, board.enPassantSquare[1] },
-                            .piece = piece,
-                            .captured = board.chessboard[board.enPassantSquare[0]]
-                                                        [board.enPassantSquare[1]],
-                            .promotion = Piece::EMPTY,
-                            .isEnPassant = true,
-                            .isCastling = false };
-                        moves++;
-                    }
+                if (board.enPassantSquare[0] == i && ((j == board.enPassantSquare[1] - 1) || (j == board.enPassantSquare[1] + 1))) {
+                    *moves = { .from = { i, j },
+                        .to = { forwardIndex, board.enPassantSquare[1] },
+                        .piece = piece,
+                        .captured = board.chessboard[board.enPassantSquare[0]]
+                                                    [board.enPassantSquare[1]],
+                        .promotion = Piece::EMPTY,
+                        .isEnPassant = true,
+                        .isCastling = false };
+                    moves++;
                 }
             }
         }

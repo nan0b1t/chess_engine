@@ -2,9 +2,14 @@
 #include "config.hpp"
 #include "move.hpp"
 #include "movegen.hpp"
+#include <cctype>
+#include "rawpiece.hpp"
 #include <iostream>
+#include <sstream>
 #include <string>
 #include "display.hpp"
+#include <vector>
+#include "cctype"
 
 Board::Board() {
     Piece initialChessboard[8][8] = {{Piece::B_ROOK, Piece::B_KNIGHT, Piece::B_BISHOP, Piece::B_QUEEN, Piece::B_KING, Piece::B_BISHOP, Piece::B_KNIGHT, Piece::B_ROOK},
@@ -30,7 +35,7 @@ Board::~Board() {
 }
 
 std::vector<Move> Board::getPsuedoMoves() {
-    Move* end = ::getPsuedoMoves(*this, moveBuffer);
+    Move* end = ::getPsuedoMoves(*this, moveBuffer, whiteToMove);
     Move* beginning = moveBuffer;
 
     return std::vector<Move>(beginning, end);
@@ -39,6 +44,79 @@ std::vector<Move> Board::getPsuedoMoves() {
 std::string getSquareBgEscapeCode(int x, int y) {
     if ((x & 1) == (y & 1)) return "\x1b[48;2;150;75;0m";
     else {return "\x1b[48;2;196;164;132m";} 
+}
+
+using std::string;
+void Board::loadFen(string fen) {
+    std::stringstream data(fen);
+    
+    string board;
+    char color;
+    string castleRights;
+    string enPassant;
+    int halfmoves;
+    int fullmoves;
+    
+    data >> board >> color >> castleRights >> enPassant >> halfmoves >> fullmoves;
+
+    // BOARD
+    std::stringstream boardData(board);
+    std::string segment;
+    std::vector<std::string> rowlist;
+
+    while(std::getline(boardData, segment, '/')) {
+        rowlist.push_back(segment);
+    }
+
+    int row = 0;
+    for (const std::string& rowStr : rowlist) {
+        int col = 0;
+        for (char c : rowStr) {
+            if (isdigit(c)) {
+                col += (c - '0');
+            } else {
+                if (isupper(c)) {
+                    chessboard[7 - row][col] = getFullPiece(charToPiece(c), true);
+                } else {
+                    chessboard[7 - row][col] = getFullPiece(charToPiece(c), false);
+                }
+                col++;
+            }
+        }
+        row++;
+    }
+
+
+    // COLOR
+    if (color == 'w') {
+        whiteToMove = true;
+    } else {
+        whiteToMove = false;
+    }
+
+    // CASTLE RIGHTS
+    for (char c : castleRights) {
+        switch (c) {
+            case 'K': canCastleWk = true; break;
+            case 'Q': canCastleWq = true; break;
+            case 'k': CanCastleBk = true; break;
+            case 'q': canCastleBq = true; break;
+        }
+    }
+    
+    // EN PASSANT
+    if (enPassant == "-") {
+        enPassantSquare[0] = enPassantSquare[1] = -1;
+    } else {
+        enPassantSquare[1] = enPassant[0] - 97; 
+        enPassantSquare[0] = 56 - enPassant[1]; 
+    }
+
+    // HALFMOVES
+    fiftyMoveRuleCounter = halfmoves;
+    
+    // FULLMOVES
+    moves = fullmoves;
 }
 
 std::ostream& operator<<(std::ostream& os, const Board& obj) {
@@ -50,5 +128,27 @@ std::ostream& operator<<(std::ostream& os, const Board& obj) {
         }
         os << "\n";
     }
+
+    os << "Side to move: " << (obj.whiteToMove ? "White" : "Black") << "\n";
+    
+    os << "Castling Rights: ";
+    if (obj.canCastleWk) os << "K";
+    if (obj.canCastleWq) os << "Q";
+    if (obj.CanCastleBk) os << "k";
+    if (obj.canCastleBq) os << "q";
+    if (!(obj.canCastleWk || obj.canCastleWq || obj.CanCastleBk || obj.canCastleBq)) os << "-";
+    os << "\n";
+
+    os << "En Passant: ";
+    if (obj.enPassantSquare[0] != -1) {
+        os << (char)('a' + obj.enPassantSquare[0]) << obj.enPassantSquare[1] + 1;
+    } else {
+        os << "-";
+    }
+    os << "\n";
+
+    os << "Fifty Move Rule: " << obj.fiftyMoveRuleCounter << "\n";
+    os << "Move Number: " << obj.moves << "\n";
+
     return os;
 }

@@ -1,7 +1,11 @@
 # Chess Engine
 CXX = c++
 CXXFLAGS = -Wall -Wextra -std=c++23
-CXXFLAGS += -fuse-ld=mold # faster linker
+
+ifeq ($(MOLD), 1)
+    CXXFLAGS += -fuse-ld=mold
+endif
+
 TARGET = chess_engine
 
 MODE ?= release

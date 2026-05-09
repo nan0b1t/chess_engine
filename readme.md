@@ -12,7 +12,7 @@ This is a simple chess engine I am working on, written in C++23.
 - Castling rights, en passant square, and fifty-move rule tracking
 - Pseudo-legal move generation for pawns (including promotions and en passant)
 - Move struct with promotion, castling, and en passant metadata
-- Algebraic notation conversion for moves (doesn't differentiate though)
+- Algebraic notation conversion for moves
 
 ---
 
@@ -24,22 +24,26 @@ This is a simple chess engine I am working on, written in C++23.
 - Search algorithm (e.g. minimax with alpha-beta pruning)
 - Position evaluation function
 - UCI protocol support
-- Add differentiation to algebraic notation (low priority)
- 
+
 ---
 
 ## Installation
 
 **Requirements:**
 - A C++23-compatible compiler (e.g. `clang++` or `g++`)
-- [`mold`](https://github.com/rui314/mold) linker
-- `make`
+- `make` (e.g. via [MinGW](https://www.mingw-w64.org/) or [MSYS2](https://www.msys2.org/) on Windows)
+- [`mold`](https://github.com/rui314/mold) *(optional, Linux only)* — faster linker that speeds up incremental builds
 
 **Build (release):**
 ```bash
 git clone https://github.com/nan0b1t/chess_engine.git
 cd chess_engine
 make
+```
+
+**Build with mold (for faster linking on Linux):**
+```bash
+make MOLD=1
 ```
 
 **Build (debug):**

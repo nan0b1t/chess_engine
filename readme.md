@@ -27,12 +27,37 @@ This is a simple chess engine I am working on, written in C++23.
 
 ---
 
+## Testing
+
+Move generation is tested against the [python-chess](https://python-chess.readthedocs.io/) library. The test script takes a file of FEN strings (one per line) and compares the engine's output moves against python-chess's legal move list.
+
+**Requirements:**
+- Python 3
+- `python-chess` (`pip install chess`)
+
+**Run tests:**
+```bash
+python test.py <fen_file>
+```
+
+For example, using the included pawn test positions:
+```bash
+python test.py pawntest.fen
+```
+
+To also print the board state after each FEN is loaded:
+```bash
+python test.py pawntest.fen print_board_after_fen_load
+```
+
+---
+
 ## Installation
 
 **Requirements:**
 - A C++23-compatible compiler (e.g. `clang++` or `g++`)
 - `make` (e.g. via [MinGW](https://www.mingw-w64.org/) or [MSYS2](https://www.msys2.org/) on Windows)
-- [`mold`](https://github.com/rui314/mold) *(optional, Linux only)* — faster linker that speeds up incremental builds
+- [`mold`](https://github.com/rui314/mold) *(optional, Linux only)* - a significantly faster linker that speeds up incremental builds
 
 **Build (release):**
 ```bash
@@ -41,7 +66,7 @@ cd chess_engine
 make
 ```
 
-**Build with mold (for faster linking on Linux):**
+**Build with mold (faster linking on Linux):**
 ```bash
 make MOLD=1
 ```
@@ -53,7 +78,7 @@ make MODE=debug
 
 **Run:**
 ```bash
-./chess_engine
+./chess_engine "<fen_string>"
 ```
 
 **Clean:**

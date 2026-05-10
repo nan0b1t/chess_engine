@@ -10,6 +10,7 @@
 #include "display.hpp"
 #include <vector>
 #include "cctype"
+#include <cstring>
 
 Board::Board() {
     Piece initialChessboard[8][8] = {{Piece::B_ROOK, Piece::B_KNIGHT, Piece::B_BISHOP, Piece::B_QUEEN, Piece::B_KING, Piece::B_BISHOP, Piece::B_KNIGHT, Piece::B_ROOK},
@@ -60,6 +61,8 @@ void Board::loadFen(string fen) {
     data >> board >> color >> castleRights >> enPassant >> halfmoves >> fullmoves;
 
     // BOARD
+    memset(chessboard, 0, sizeof(chessboard)); // clear the board first
+
     std::stringstream boardData(board);
     std::string segment;
     std::vector<std::string> rowlist;
@@ -76,9 +79,9 @@ void Board::loadFen(string fen) {
                 col += (c - '0');
             } else {
                 if (isupper(c)) {
-                    chessboard[7 - row][col] = getFullPiece(charToPiece(c), true);
+                    chessboard[row][col] = getFullPiece(charToPiece(c), true);
                 } else {
-                    chessboard[7 - row][col] = getFullPiece(charToPiece(c), false);
+                    chessboard[row][col] = getFullPiece(charToPiece(c), false);
                 }
                 col++;
             }

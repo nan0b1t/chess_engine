@@ -2,3 +2,6 @@ compile_commands.json
 *.o
 *.idx
 chess_engine
+output.txt
+.venv/
+.vscode/

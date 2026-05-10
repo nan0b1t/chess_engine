@@ -20,7 +20,6 @@ struct Board {
     Board();
     ~Board();
     friend std::ostream& operator<<(std::ostream& os, const Board& obj); // so i can cout it
-    void display();
     std::vector<Move> getPsuedoMoves(); // for user friendly stuff, not high-performance internal enigne calculation
     void loadFen(std::string fen);
 

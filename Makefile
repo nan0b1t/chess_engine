@@ -18,7 +18,7 @@ else
     BUILD_DIR = build/release
 endif
 
-SRC := $(shell find . -maxdepth 1 -type f -name '*.cpp')
+SRC := $(wildcard *.cpp)
 OBJ := $(SRC:%.cpp=$(BUILD_DIR)/%.o)
 
 all: $(TARGET)
@@ -35,7 +35,7 @@ $(BUILD_DIR)/%.o: %.cpp
 clean:
 	rm -rf build $(TARGET)
 
-.PHONY: all cleann
+.PHONY: all clean
 
 test: $(TARGET)
 	python test.py pawntest.fen

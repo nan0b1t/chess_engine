@@ -36,3 +36,6 @@ clean:
 	rm -rf build $(TARGET)
 
 .PHONY: all cleann
+
+test: $(TARGET)
+	python test.py pawntest.fen

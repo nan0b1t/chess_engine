@@ -8,6 +8,9 @@ printBoardAfterFenLoad = sys.argv[2] if len(sys.argv) > 2 else None
 with open(args, 'r') as f:
     lines = f.readlines()
 
+total_tests = len(lines)
+successful_tests = 0
+
 for line in lines:
 
     print("Testing FEN:", line.strip())
@@ -62,7 +65,11 @@ for line in lines:
     # use ansi for green/red text
     if passed:
         print("\x1b[92mAll legal moves match between Python and C++ outputs.\x1b[0m")
+        successful_tests += 1
     else:
         print("\x1b[91mSome legal moves do not match between Python and C++ outputs.\x1b[0m")
     
     print("--------------------------------------------------\n")
+
+
+print(f"Test Results: {successful_tests}/{total_tests} tests passed.")

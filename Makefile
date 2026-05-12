@@ -39,8 +39,9 @@ clean:
 TEST_DIR := tests
 TEST_FILE ?= pawntest.fen
 TEST_PATH := $(TEST_DIR)/$(TEST_FILE)
+PRINT_BOARD ?=
 
 .PHONY: all clean test
 
 test: $(TARGET)
-	python $(TEST_DIR)/test.py $(TEST_PATH)
+	python $(TEST_DIR)/test.py $(TEST_PATH) $(PRINT_BOARD)

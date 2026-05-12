@@ -112,17 +112,18 @@ Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
                     }
                 }
 
-                if (board.enPassantSquare[0] == i && ((j == board.enPassantSquare[1] - 1) || (j == board.enPassantSquare[1] + 1))) {
+                // en passant  
+                if (board.enPassantSquare[0] == forwardIndex && ((j == board.enPassantSquare[1] - 1) || (j == board.enPassantSquare[1] + 1))) {
                     *moves = { .from = { i, j },
-                        .to = { forwardIndex, board.enPassantSquare[1] },
+                        .to = { board.enPassantSquare[0], board.enPassantSquare[1] },
                         .piece = piece,
-                        .captured = board.chessboard[board.enPassantSquare[0]]
-                                                    [board.enPassantSquare[1]],
+                        .captured = board.chessboard[i][board.enPassantSquare[1]], // Victim is on the same row as attacker
                         .promotion = Piece::EMPTY,
                         .isEnPassant = true,
                         .isCastling = false };
                     moves++;
                 }
+
             }
         }
     }

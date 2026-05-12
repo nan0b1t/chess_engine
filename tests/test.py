@@ -1,12 +1,20 @@
-import chess
 import subprocess
 import sys
 
-args = sys.argv[1]
-printBoardAfterFenLoad = sys.argv[2] if len(sys.argv) > 2 else None
+try:    import chess
+except ImportError:
+    print("The 'chess' library is required to run this test. Please install it using 'pip install -r requirements.txt'.")
+    sys.exit(1)
 
-with open(args, 'r') as f:
-    lines = f.readlines()
+try:
+    args = sys.argv[1]
+    printBoardAfterFenLoad = sys.argv[2] if len(sys.argv) > 2 else None
+
+    with open(args, 'r') as f:
+        lines = f.readlines()
+except IndexError:
+    print("Usage: python test.py <fen_file.fen> [print_board]")
+    sys.exit(1)
 
 total_tests = len(lines)
 successful_tests = 0

@@ -144,7 +144,7 @@ std::ostream& operator<<(std::ostream& os, const Board& obj) {
 
     os << "En Passant: ";
     if (obj.enPassantSquare[0] != -1) {
-        os << (char)('a' + obj.enPassantSquare[0]) << obj.enPassantSquare[1] + 1;
+        os << (char)('a' + obj.enPassantSquare[1]) << (8 - obj.enPassantSquare[0]);
     } else {
         os << "-";
     }

@@ -45,17 +45,17 @@ make test
 make test TEST_FILE=your_test_file.fen
 ```
 
+**Run tests and print board state after each FEN is loaded:**
+```bash
+make test PRINT_BOARD=print_board_after_fen_load
+```
+
+**Combine both options:**
+```bash
+make test TEST_FILE=your_test_file.fen PRINT_BOARD=print_board_after_fen_load
+```
+
 The default test file is `tests/pawntest.fen` and the script runs `tests/test.py`.
-
-For example, using the included pawn test positions:
-```bash
-make test
-```
-
-To also print the board state after each FEN is loaded, run the script directly:
-```bash
-python tests/test.py tests/pawntest.fen print_board_after_fen_load
-```
 
 ---
 

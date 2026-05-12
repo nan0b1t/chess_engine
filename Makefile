@@ -36,7 +36,11 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 clean:
 	rm -rf build $(TARGET)
 
-.PHONY: all clean
+TEST_DIR := tests
+TEST_FILE ?= pawntest.fen
+TEST_PATH := $(TEST_DIR)/$(TEST_FILE)
+
+.PHONY: all clean test
 
 test: $(TARGET)
-	python test.py pawntest.fen
+	python $(TEST_DIR)/test.py $(TEST_PATH)

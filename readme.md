@@ -35,19 +35,26 @@ Move generation is tested against the [python-chess](https://python-chess.readth
 - Python 3
 - `python-chess` (`pip install chess`)
 
-**Run tests:**
+**Run tests with Make:**
 ```bash
-python test.py <fen_file>
+make test
 ```
+
+**Run tests with a custom test file:**
+```bash
+make test TEST_FILE=your_test_file.fen
+```
+
+The default test file is `tests/pawntest.fen` and the script runs `tests/test.py`.
 
 For example, using the included pawn test positions:
 ```bash
-python test.py pawntest.fen
+make test
 ```
 
-To also print the board state after each FEN is loaded:
+To also print the board state after each FEN is loaded, run the script directly:
 ```bash
-python test.py pawntest.fen print_board_after_fen_load
+python tests/test.py tests/pawntest.fen print_board_after_fen_load
 ```
 
 ---
@@ -78,7 +85,7 @@ make MODE=debug
 
 **Run:**
 ```bash
-./chess_engine "<fen_string>"
+./chess_engine "<fen_string>" [print_board_after_fen_load]
 ```
 
 **Clean:**

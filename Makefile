@@ -18,8 +18,9 @@ else
     BUILD_DIR = build/release
 endif
 
-SRC := $(wildcard *.cpp)
-OBJ := $(SRC:%.cpp=$(BUILD_DIR)/%.o)
+SRC_DIR := src
+SRC := $(wildcard $(SRC_DIR)/*.cpp)
+OBJ := $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRC))
 
 all: $(TARGET)
 
@@ -28,7 +29,7 @@ $(TARGET): $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ)
 
 # Compile objects into their specific build directory
-$(BUILD_DIR)/%.o: %.cpp
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 

@@ -5,3 +5,4 @@ chess_engine
 output.txt
 .venv/
 .vscode/
+.build/

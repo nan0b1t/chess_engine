@@ -1,5 +1,6 @@
 import subprocess
 import sys
+from collections import defaultdict
 
 try:    import chess
 except ImportError:
@@ -18,6 +19,8 @@ except IndexError:
 
 total_tests = len(lines)
 successful_tests = 0
+
+failed_fens = defaultdict(list) # use a set
 
 for line in lines:
 
@@ -57,6 +60,8 @@ for line in lines:
         else:
             print("No match found in C++ output.")
             passed = False
+            if "Python move not found in C++ output" not in failed_fens[line.strip()]:
+                failed_fens[line.strip()].append("Python move not found in C++ output")
 
     print("\n")
 
@@ -67,6 +72,9 @@ for line in lines:
         else:
             print("No match found in Python output.")
             passed = False
+            if "C++ move not found in Python output" not in failed_fens[line.strip()]:
+                failed_fens[line.strip()].append("C++ move not found in Python output")
+
     
     print("\n")
     
@@ -81,3 +89,7 @@ for line in lines:
 
 
 print(f"Test Results: {successful_tests}/{total_tests} tests passed.")
+
+if failed_fens:
+    for fen, issues in failed_fens.items():
+        print(f"FEN: {fen} - Issues:\n {'; '.join(issues)}")

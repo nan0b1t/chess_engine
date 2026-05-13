@@ -23,7 +23,7 @@ std::string moveToAlgebraic(const Move& move) {
 
     // Piece identifier
     if (!isPawn) {
-        notation += pieceToStr(move.piece);
+        notation += pieceToAlgebraic(move.piece);
     }
 
     // Capture indicator
@@ -41,7 +41,7 @@ std::string moveToAlgebraic(const Move& move) {
     // Promotion
     if (move.promotion != Piece::EMPTY) {
         notation += "=";
-        notation += pieceToStr(move.promotion);
+        notation += pieceToAlgebraic(move.promotion);
     }
 
     return notation;

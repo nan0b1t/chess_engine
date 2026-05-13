@@ -26,3 +26,15 @@ std::string pieceToStr(Piece piece) {
     result.append("\x1b[39m");
     return result;
 }
+
+std::string pieceToAlgebraic(Piece piece) {
+    switch (piece) {
+        case Piece::W_PAWN:   case Piece::B_PAWN:   return "P";
+        case Piece::W_KNIGHT: case Piece::B_KNIGHT: return "N";
+        case Piece::W_BISHOP: case Piece::B_BISHOP: return "B";
+        case Piece::W_ROOK:   case Piece::B_ROOK:   return "R";
+        case Piece::W_QUEEN:  case Piece::B_QUEEN:  return "Q";
+        case Piece::W_KING:   case Piece::B_KING:   return "K";
+        default: return "";
+    }
+}

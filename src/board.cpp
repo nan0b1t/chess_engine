@@ -13,6 +13,7 @@
 #include <cstring>
 
 Board::Board() {
+    canCastleWk = canCastleWq = CanCastleBk = canCastleBq = false;
     Piece initialChessboard[8][8] = {{Piece::B_ROOK, Piece::B_KNIGHT, Piece::B_BISHOP, Piece::B_QUEEN, Piece::B_KING, Piece::B_BISHOP, Piece::B_KNIGHT, Piece::B_ROOK},
                                 {Piece::B_PAWN, Piece::B_PAWN,   Piece::B_PAWN,   Piece::B_PAWN,  Piece::B_PAWN, Piece::B_PAWN,   Piece::B_PAWN,   Piece::B_PAWN},
                                 {Piece::EMPTY,  Piece::EMPTY,    Piece::EMPTY,    Piece::EMPTY,   Piece::EMPTY,  Piece::EMPTY,    Piece::EMPTY,    Piece::EMPTY},
@@ -98,6 +99,7 @@ void Board::loadFen(string fen) {
     }
 
     // CASTLE RIGHTS
+    canCastleWk = canCastleWq = CanCastleBk = canCastleBq = false;
     for (char c : castleRights) {
         switch (c) {
             case 'K': canCastleWk = true; break;
@@ -111,8 +113,8 @@ void Board::loadFen(string fen) {
     if (enPassant == "-") {
         enPassantSquare[0] = enPassantSquare[1] = -1;
     } else {
-        enPassantSquare[1] = enPassant[0] - 97; 
-        enPassantSquare[0] = 56 - enPassant[1]; 
+        enPassantSquare[1] = enPassant[0] - 'a';
+        enPassantSquare[0] = 8 - (enPassant[1] - '0');
     }
 
     // HALFMOVES

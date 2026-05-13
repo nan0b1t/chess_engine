@@ -1,3 +1,5 @@
+#pragma once
+
 #include "piece.hpp"
 #include <cctype>
 

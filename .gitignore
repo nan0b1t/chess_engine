@@ -6,3 +6,5 @@ output.txt
 .venv/
 .vscode/
 .build/
+test.cpp
+test

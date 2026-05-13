@@ -1,5 +1,4 @@
 #pragma once
-#include "move.hpp"
 #include <string>
 
 struct Move;

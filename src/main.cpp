@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
     board.loadFen(fen);
 
     std::cout << "START\n";
-    for (auto item : board.getPsuedoMoves()) {
+    for (Move item : board.getPsuedoMoves()) {
         std::cout << moveToAlgebraic(item) << '\n';
     }
     std::cout << "END\n";

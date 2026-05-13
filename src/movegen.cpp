@@ -24,7 +24,9 @@ void addPromotionMoves(Move** moves, int fromI, int fromJ, int toI, int toJ, Pie
     }
 }
 
-bool isCapturable(Piece p1, Piece p2) { return (isWhite(p1) != isWhite(p2)) && (!(p1 == Piece::EMPTY) && (p2 == Piece::EMPTY)); }
+bool isCapturable(Piece p1, Piece p2) {
+    return p1 != Piece::EMPTY && p2 != Piece::EMPTY && (isWhite(p1) != isWhite(p2));
+}
 
 Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
 {
@@ -36,7 +38,7 @@ Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
                 continue;
             }
 
-            if (whiteToPlay == isWhite(piece)) continue;
+            if (whiteToPlay != isWhite(piece)) continue; // skip pieces that arent the color to move
 
             if (isPawn(piece)) {
                 int forwardIndex;
@@ -113,17 +115,17 @@ Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
                 }
 
                 // en passant  
-                if (board.enPassantSquare[0] == forwardIndex && ((j == board.enPassantSquare[1] - 1) || (j == board.enPassantSquare[1] + 1))) {
+                // after further testing, this is probably wrong
+                if (board.enPassantSquare[0] == forwardIndex && (((j == board.enPassantSquare[1] - 1)) || (j == board.enPassantSquare[1] + 1))) {
                     *moves = { .from = { i, j },
                         .to = { board.enPassantSquare[0], board.enPassantSquare[1] },
                         .piece = piece,
-                        .captured = board.chessboard[i][board.enPassantSquare[1]], // Victim is on the same row as attacker
+                        .captured = board.chessboard[i][board.enPassantSquare[1]],
                         .promotion = Piece::EMPTY,
                         .isEnPassant = true,
                         .isCastling = false };
                     moves++;
                 }
-
             }
         }
     }

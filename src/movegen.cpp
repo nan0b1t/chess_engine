@@ -124,7 +124,7 @@ Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
                 if (board.enPassantSquare[0] == forwardIndex
                     && ((j == board.enPassantSquare[1] - 1) || (j == board.enPassantSquare[1] + 1))) {
                     Piece epTarget = board.chessboard[i][board.enPassantSquare[1]];
-                    if (isCapturable(epTarget, piece) && isPawn(epTarget)) {
+                    if (isCapturable(epTarget, piece) && isPawn(epTarget) && (isCapturable(piece, board.chessboard[board.enPassantSquare[0]][board.enPassantSquare[1]]))) {
                         *moves = { .from = { i, j },
                             .to = { board.enPassantSquare[0], board.enPassantSquare[1] },
                             .piece = piece,

@@ -50,9 +50,14 @@ make test TEST_FILE=your_test_file.fen
 make test PRINT_BOARD=print_board_after_fen_load
 ```
 
-**Combine both options:**
+**Run and show failed fens afterwards**
 ```bash
-make test TEST_FILE=your_test_file.fen PRINT_BOARD=print_board_after_fen_load
+make test SHOW_FAILED=show_failed_fens
+```
+
+**Combine all options:**
+```bash
+make test TEST_FILE=your_test_file.fen PRINT_BOARD=print_board_after_fen_load SHOW_FAILED=show_failed_fens
 ```
 
 The default test file is `tests/pawntest.fen` and the script runs `tests/test.py`.

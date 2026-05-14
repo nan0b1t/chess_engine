@@ -8,3 +8,4 @@ output.txt
 .build/
 test.cpp
 test
+RANDOM*.fen

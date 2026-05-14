@@ -10,11 +10,12 @@ except ImportError:
 try:
     args = sys.argv[1]
     printBoardAfterFenLoad = sys.argv[2] if len(sys.argv) > 2 else None
+    showFailedFens = sys.argv[3] if len(sys.argv) > 3 else None
 
     with open(args, 'r') as f:
         lines = f.readlines()
 except IndexError:
-    print("Usage: python test.py <fen_file.fen> [print_board]")
+    print("Usage: python test.py <fen_file.fen> [print_board] [show_failed_fens]")
     sys.exit(1)
 
 total_tests = len(lines)
@@ -56,9 +57,9 @@ for line in lines:
     for move in legal_moves:
         print("Python Move:", move)
         if move in cpp_result:
-            print("Match found in C++ output.")
+            print("\x1b[92mMatch found in C++ output.\x1b[0m")
         else:
-            print("No match found in C++ output.")
+            print("\x1b[91mNo match found in C++ output.\x1b[0m")
             passed = False
             if "Python move not found in C++ output" not in failed_fens[line.strip()]:
                 failed_fens[line.strip()].append("Python move not found in C++ output")
@@ -68,9 +69,9 @@ for line in lines:
     for move in cpp_result:
         print("C++ Move:", move)
         if move in legal_moves:
-            print("Match found in Python output.")
+            print("\x1b[92mMatch found in Python output.\x1b[0m")
         else:
-            print("No match found in Python output.")
+            print("\x1b[91mNo match found in Python output.\x1b[0m")
             passed = False
             if "C++ move not found in Python output" not in failed_fens[line.strip()]:
                 failed_fens[line.strip()].append("C++ move not found in Python output")
@@ -90,6 +91,6 @@ for line in lines:
 
 print(f"Test Results: {successful_tests}/{total_tests} tests passed.")
 
-if failed_fens:
+if failed_fens and showFailedFens:
     for fen, issues in failed_fens.items():
         print(f"FEN: {fen} - Issues:\n {'; '.join(issues)}")

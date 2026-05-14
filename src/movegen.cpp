@@ -81,50 +81,59 @@ Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
                 }
 
                 // check left capture
-                if (j > 0 && i != 7 && i != 0 && isCapturable(board.chessboard[forwardIndex][j - 1], piece)) {
+                if (j > 0 && forwardIndex >= 0 && forwardIndex < 8) {
+                    Piece target = board.chessboard[forwardIndex][j - 1];
 
-                    if (forwardIndex == 0 || forwardIndex == 7) {
-                        addPromotionMoves(&moves, i, j, forwardIndex, j - 1, piece, board.chessboard[forwardIndex][j - 1], isWhite(piece), false);
-                    } else {
-                        *moves = { .from = { i, j },
-                            .to = { forwardIndex, j - 1 },
-                            .piece = piece,
-                            .captured = board.chessboard[forwardIndex][j - 1],
-                            .promotion = Piece::EMPTY,
-                            .isEnPassant = false,
-                            .isCastling = false };
-                        moves++;
+                    if (isCapturable(target, piece)) {
+                        if (forwardIndex == 0 || forwardIndex == 7) {
+                            addPromotionMoves(&moves, i, j, forwardIndex, j - 1, piece, target, isWhite(piece), false);
+                        } else {
+                            *moves = { .from = { i, j },
+                                .to = { forwardIndex, j - 1 },
+                                .piece = piece,
+                                .captured = target,
+                                .promotion = Piece::EMPTY,
+                                .isEnPassant = false,
+                                .isCastling = false };
+                            moves++;
+                        }
                     }
                 }
 
                 // check right capture
-                if (j < 7 && i != 7 && i != 0 && isCapturable(board.chessboard[forwardIndex][j + 1], piece)) {
-
-                    if (forwardIndex == 0 || forwardIndex == 7) {
-                        addPromotionMoves(&moves, i, j, forwardIndex, j + 1, piece, board.chessboard[forwardIndex][j + 1], isWhite(piece), false);
-                    } else {
-                        *moves = { .from = { i, j },
-                            .to = { forwardIndex, j + 1 },
-                            .piece = piece,
-                            .captured = board.chessboard[forwardIndex][j + 1],
-                            .promotion = Piece::EMPTY,
-                            .isEnPassant = false,
-                            .isCastling = false };
-                        moves++;
+                if (j < 7 && forwardIndex >= 0 && forwardIndex < 8) {
+                    Piece target = board.chessboard[forwardIndex][j + 1];
+                    
+                    if (isCapturable(target, piece)) {
+                        if (forwardIndex == 0 || forwardIndex == 7) {
+                            addPromotionMoves(&moves, i, j, forwardIndex, j + 1, piece, target, isWhite(piece), false);
+                        } else {
+                            *moves = { .from = { i, j },
+                                    .to = { forwardIndex, j + 1 },
+                                    .piece = piece,
+                                    .captured = target,
+                                    .promotion = Piece::EMPTY,
+                                    .isEnPassant = false,
+                                    .isCastling = false };
+                            moves++;
+                        }
                     }
                 }
 
-                // en passant  
-                // after further testing, this is probably wrong
-                if (board.enPassantSquare[0] == forwardIndex && (((j == board.enPassantSquare[1] - 1)) || (j == board.enPassantSquare[1] + 1))) {
-                    *moves = { .from = { i, j },
-                        .to = { board.enPassantSquare[0], board.enPassantSquare[1] },
-                        .piece = piece,
-                        .captured = board.chessboard[i][board.enPassantSquare[1]],
-                        .promotion = Piece::EMPTY,
-                        .isEnPassant = true,
-                        .isCastling = false };
-                    moves++;
+                // en passant
+                if (board.enPassantSquare[0] == forwardIndex
+                    && ((j == board.enPassantSquare[1] - 1) || (j == board.enPassantSquare[1] + 1))) {
+                    Piece epTarget = board.chessboard[i][board.enPassantSquare[1]];
+                    if (isCapturable(epTarget, piece) && isPawn(epTarget)) {
+                        *moves = { .from = { i, j },
+                            .to = { board.enPassantSquare[0], board.enPassantSquare[1] },
+                            .piece = piece,
+                            .captured = epTarget,
+                            .promotion = Piece::EMPTY,
+                            .isEnPassant = true,
+                            .isCastling = false };
+                        moves++;
+                    }
                 }
             }
         }

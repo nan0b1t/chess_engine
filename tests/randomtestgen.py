@@ -26,6 +26,8 @@ def generate_random_fen():
 
     for row_index, row in enumerate(board):
         for cell_index, cell in enumerate(row):
+            en_passant_square = '-' # reset en passant square for each cell
+
             match cell:
                 case 'P':
                     fen += 'P'

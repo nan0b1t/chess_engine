@@ -136,6 +136,24 @@ Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
                     }
                 }
             }
+
+            if (isKnight(piece)) {
+                for (const int (&move)[2] : knightMoves) {
+                    Piece capturedPiece = board.chessboard[i + move[1]][i + move[0]];
+
+                    if (isCapturable(piece, capturedPiece) && (i + move[1] > 0 && i + move[1] < 8) && (j + move[0] > 0 && j + move[0] < 8)) {
+                        *moves++ = {
+                            .from = {i, j},
+                            .to = {i + move[1], i + move[0]},
+                            .piece = piece,
+                            .captured = capturedPiece,
+                            .promotion = Piece::EMPTY,
+                            .isEnPassant = false,
+                            .isCastling = false
+                        };
+                    }
+                }
+            }
         }
     }
     return moves; // used for iterating until end of moves

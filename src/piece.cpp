@@ -1,17 +1,16 @@
 #include "piece.hpp"
+#include "board.hpp"
 #include "move.hpp"
 #include "display.hpp"
 #include <string>
+#include "movegen.hpp"
+#include "config.hpp"
 
-
-std::string moveToAlgebraic(const Move& move) {
+std::string moveToAlgebraic(const Move& move, const Board& board) {
     // CASTLING
     if (move.isCastling) {
         return (move.to[1] == 6) ? "O-O" : "O-O-O";
     }
-
-    // for some reason en passant is only triggered once in the entire pawn test, at 8/8/8/6pP/8/8/8/8 b - g6 0 1
-    // the movegen is probably wrong - not this function
 
     if (move.isEnPassant) {
         return std::string(1, static_cast<char>('a' + move.from[1])) + "x" +
@@ -24,6 +23,14 @@ std::string moveToAlgebraic(const Move& move) {
     // Piece identifier
     if (!isPawn) {
         notation += pieceToAlgebraic(move.piece);
+        
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                if (canMoveTo(board.chessboard[row][col], row, col, move.to[0], move.to[1], board)) {
+
+                }
+            }
+        }
     }
 
     // Capture indicator
@@ -45,4 +52,24 @@ std::string moveToAlgebraic(const Move& move) {
     }
 
     return notation;
+}
+
+bool checkForAmbiguation(const Move& move, const Board& board) {
+
+}
+
+bool canMoveTo(Piece piece, int rankFrom, int fileFrom, int rankTo, int fileTo, const Board &board) {
+    Move moveBuf[LEGAL_MOVES_BUFFER_MAX];
+    Move* end = getPsuedoMoves(board, moveBuf, board.whiteToMove);
+
+    for (Move* begin = moveBuf; begin < end; begin++) {
+        Move move = *begin;
+
+        if (move.piece == piece && move.to[0] == rankTo && move.to[1] == fileTo &&
+            move.from[0] == rankFrom && move.from[1] == fileFrom) {
+            return true;
+        }
+    }
+
+    return false;
 }

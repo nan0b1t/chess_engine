@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+struct Board;
 struct Move;
 
 enum class Piece{
@@ -19,7 +20,9 @@ enum class Piece{
     B_KING
 };
 
-std::string moveToAlgebraic(const Move& move);
+std::string moveToAlgebraic(const Move& move, const Board& board);
+bool canMoveTo(Piece piece, int rankFrom, int fileFrom, int rankTo, int fileTo, const Board &board);
+
 
 inline bool isPawn(Piece piece) {
     return (piece == Piece::W_PAWN || piece == Piece::B_PAWN);

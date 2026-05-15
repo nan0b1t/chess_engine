@@ -19,7 +19,7 @@ int main(int argc, char* argv[]){
 
     std::cout << "START\n";
     for (Move item : board.getPsuedoMoves()) {
-        std::cout << moveToAlgebraic(item) << '\n';
+        std::cout << moveToAlgebraic(item, board) << '\n';
     }
     std::cout << "END\n";
 

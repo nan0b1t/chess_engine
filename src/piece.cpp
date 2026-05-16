@@ -5,6 +5,10 @@
 #include <string>
 #include "movegen.hpp"
 #include "config.hpp"
+#include <optional>
+
+bool checkForAmbiguation(Piece piece, int rowTo, int fileTo, const Board& board, std::optional<int> rankFrom, std::optional<int> fileFrom, int rowReal, int fileReal);
+
 
 std::string moveToAlgebraic(const Move& move, const Board& board) {
     // CASTLING
@@ -23,12 +27,21 @@ std::string moveToAlgebraic(const Move& move, const Board& board) {
     // Piece identifier
     if (!isPawn) {
         notation += pieceToAlgebraic(move.piece);
-        
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
-                if (canMoveTo(board.chessboard[row][col], row, col, move.to[0], move.to[1], board)) {
 
-                }
+        bool isAmbiguous = checkForAmbiguation(move.piece, move.to[0], move.to[1], board, std::nullopt, std::nullopt, move.from[0], move.from[1]);
+
+        if (isAmbiguous) {
+            bool fileIsAmbiguous = checkForAmbiguation(move.piece, move.to[0], move.to[1], board, std::nullopt, move.from[1], move.from[0], move.from[1]);
+
+            bool rankIsAmbiguous = checkForAmbiguation(move.piece, move.to[0], move.to[1], board, move.from[0], std::nullopt, move.from[0], move.from[1]);
+
+            if (fileIsAmbiguous && rankIsAmbiguous) {
+                notation += (move.from[1] + 'a');
+                notation += ('8' - move.from[0]);
+            } else if (!fileIsAmbiguous) {
+                notation += (move.from[1] + 'a');
+            } else {
+                notation += ('8' - move.from[0]);
             }
         }
     }
@@ -54,8 +67,20 @@ std::string moveToAlgebraic(const Move& move, const Board& board) {
     return notation;
 }
 
-bool checkForAmbiguation(const Move& move, const Board& board) {
 
+bool checkForAmbiguation(Piece piece, int rowTo, int fileTo, const Board& board, std::optional<int> rankFrom, std::optional<int> fileFrom, int rowReal, int fileReal) {
+    for (int row = 0; row < BOARD_SIZE; row++) {
+        for (int col = 0; col < BOARD_SIZE; col++) {
+            if (board.chessboard[row][col] == piece && canMoveTo(board.chessboard[row][col], row, col, rowTo, fileTo, board) && !(row == rowReal && col == fileReal)) {
+                if ((rankFrom.has_value() && (row != *rankFrom)) || (fileFrom.has_value() && (col != *fileFrom))) {
+                    continue;
+                }
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 bool canMoveTo(Piece piece, int rankFrom, int fileFrom, int rankTo, int fileTo, const Board &board) {

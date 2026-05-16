@@ -103,7 +103,7 @@ Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
                 // check right capture
                 if (j < 7 && forwardIndex >= 0 && forwardIndex < 8) {
                     Piece target = board.chessboard[forwardIndex][j + 1];
-                    
+
                     if (isCapturable(target, piece)) {
                         if (forwardIndex == 0 || forwardIndex == 7) {
                             addPromotionMoves(&moves, i, j, forwardIndex, j + 1, piece, target, isWhite(piece), false);
@@ -139,12 +139,19 @@ Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
 
             if (isKnight(piece)) {
                 for (const int (&move)[2] : knightMoves) {
-                    Piece capturedPiece = board.chessboard[i + move[1]][i + move[0]];
+                    int capturedI = i + move[1];
+                    int capturedJ = j + move[0];
 
-                    if (isCapturable(piece, capturedPiece) && (i + move[1] > 0 && i + move[1] < 8) && (j + move[0] > 0 && j + move[0] < 8)) {
+                    if (capturedI < 0 || capturedI > 7  || capturedJ < 0 || capturedJ > 7) {
+                        continue;
+                    }
+
+                    Piece capturedPiece = board.chessboard[capturedI][capturedJ];
+
+                    if ((isCapturable(piece, capturedPiece) || capturedPiece == Piece::EMPTY)) {
                         *moves++ = {
                             .from = {i, j},
-                            .to = {i + move[1], i + move[0]},
+                            .to = {i + move[1], j + move[0]},
                             .piece = piece,
                             .captured = capturedPiece,
                             .promotion = Piece::EMPTY,

@@ -2,10 +2,12 @@
 #include "board.hpp"
 #include "move.hpp"
 #include "display.hpp"
+#include <cctype>
 #include <string>
 #include "movegen.hpp"
 #include "config.hpp"
 #include <optional>
+#include <cctype>
 
 bool checkForAmbiguation(Piece piece, int rowTo, int fileTo, const Board& board, std::optional<int> rankFrom, std::optional<int> fileFrom, int rowReal, int fileReal);
 
@@ -65,6 +67,21 @@ std::string moveToAlgebraic(const Move& move, const Board& board) {
     }
 
     return notation;
+}
+
+std::string moveToUci(const Move& move) { // SO MUCH EASIER THAN FEN
+    std::string result;
+
+    result += 'a' + move.from[1];
+    result += '8' - move.from[0];
+    result += 'a' + move.to[1];
+    result += '8' - move.to[0];
+
+    if (move.promotion != Piece::EMPTY) {
+       result += tolower(pieceToAlgebraic(move.promotion)[0]);
+    }
+
+    return result;
 }
 
 

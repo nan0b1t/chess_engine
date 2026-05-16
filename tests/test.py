@@ -31,7 +31,11 @@ for line in lines:
 
     board = chess.Board(line.strip())
 
-    legal_moves = list([board.san(move) for move in board.legal_moves])
+    legal_moves = list(
+        [
+            board.san(move).strip("#+") for move in board.pseudo_legal_moves
+        ]  # remove check/checkmate [FOR NOW]
+    )
 
     print("\n")
 

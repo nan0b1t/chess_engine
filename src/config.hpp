@@ -2,6 +2,7 @@
 
 constexpr int LEGAL_MOVES_BUFFER_MAX = 512;
 constexpr int BOARD_SIZE = 8;
+
 constexpr int knightMoves[8][2] = {
     {2, 1},
     {2, -1},
@@ -12,6 +13,7 @@ constexpr int knightMoves[8][2] = {
     {-2, 1},
     {-2, -1}
 };
+
 constexpr int kingMoves[8][2] = {
     {1, 0},
     {1, 1},
@@ -21,4 +23,17 @@ constexpr int kingMoves[8][2] = {
     {-1, -1},
     {0, -1},
     {1, -1}
+};
+
+constexpr int bishopDirections[4][2] = {
+    {1, 1}, {1, -1}, {-1, 1}, {-1, -1}
+};
+
+constexpr int rookDirections[4][2] = {
+    {1, 0}, {-1, 0}, {0, 1}, {0, -1}
+};
+
+constexpr int queenDirections[8][2] = {
+    {1, 1}, {1, -1}, {-1, 1}, {-1, -1},
+    {1, 0}, {-1, 0}, {0, 1}, {0, -1}
 };

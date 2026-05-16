@@ -191,10 +191,21 @@ Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
             }
 
             if (isRook(piece)) {
-                moves = slide(1, 0, i, j, moves, board);
-                moves = slide(-1, 0, i, j, moves, board);
-                moves = slide(0, 1, i, j, moves, board);
-                moves = slide(0, -1, i, j, moves, board);
+                for (const int (&move)[2] : rookDirections) {
+                    moves = slide(move[0], move[1], i, j, moves, board);
+                }
+            }
+
+            if (isBishop(piece)) {
+                for (const int (&move)[2] : bishopDirections) {
+                    moves = slide(move[0], move[1], i, j, moves, board);
+                }
+            }
+
+            if (isQueen(piece)) {
+                for (const int (&move)[2] : queenDirections) {
+                    moves = slide(move[0], move[1], i, j, moves, board);
+                }
             }
         }
     }

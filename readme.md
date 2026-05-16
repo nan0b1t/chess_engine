@@ -10,7 +10,7 @@ This is a simple chess engine I am working on, written in C++23.
 - FEN string parsing and loading
 - Board display with ANSI color output in the terminal
 - Castling rights, en passant square, and fifty-move rule tracking
-- Pseudo-legal move generation for pawns (including promotions and en passant), and knights
+- Pseudo-legal move generation for pawns (including promotions and en passant), knights, and kings
 - Move struct with promotion, castling, and en passant metadata
 - Algebraic notation conversion for moves
 - Uci notation for moves
@@ -18,7 +18,7 @@ This is a simple chess engine I am working on, written in C++23.
 
 ## Planned Features
 
-- Move generation for all remaining pieces (bishops, rooks, queens, kings)
+- Move generation for sliding pieces (bishops, rooks, queens)
 - Legal move generation (filter out moves that leave the king in check)
 - Upgrade board representation from 8x8 array to bitboards
 - Search algorithm (e.g. minimax with alpha-beta pruning)

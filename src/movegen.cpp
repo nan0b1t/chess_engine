@@ -6,6 +6,8 @@
 #include "piece.hpp"
 #include "rawpiece.hpp"
 
+Move* slide(int offsetI, int offsetJ, int startI, int startJ, Move* movePtr, const Board& board);
+
 void addPromotionMoves(Move** moves, int fromI, int fromJ, int toI, int toJ, Piece piece, Piece captured, bool isWhite, bool isEnPassant)
 {
     RawPiece promotionChoices[] = { RawPiece::QUEEN, RawPiece::ROOK, RawPiece::BISHOP, RawPiece::KNIGHT };
@@ -187,7 +189,61 @@ Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
                     }
                 }
             }
+
+            if (isRook(piece)) {
+                moves = slide(1, 0, i, j, moves, board);
+                moves = slide(-1, 0, i, j, moves, board);
+                moves = slide(0, 1, i, j, moves, board);
+                moves = slide(0, -1, i, j, moves, board);
+            }
         }
     }
     return moves; // used for iterating until end of moves
+}
+
+Move* slide(int offsetI, int offsetJ, int startI, int startJ, Move* movePtr, const Board& board) {
+    Piece piece = board.chessboard[startI][startJ];
+
+    int i = startI + offsetI;
+    int j = startJ + offsetJ;
+
+    while (i <= 7 && i >= 0 && j <= 7 && j >= 0) {
+        Piece movedTo = board.chessboard[i][j];
+
+        if (isCapturable(piece, movedTo)) {
+            *movePtr = {
+                .from = {startI, startJ},
+                .to = {i, j},
+                .piece = piece,
+                .captured = movedTo,
+                .promotion = Piece::EMPTY,
+                .isEnPassant = false,
+                .isCastling = false
+            };
+            movePtr++;
+            return movePtr;
+        }
+
+        if (isWhite(movedTo) == isWhite(piece) && movedTo != Piece::EMPTY) {
+            return movePtr;
+        }
+
+        if (movedTo == Piece::EMPTY) {
+            *movePtr = {
+                .from = {startI, startJ},
+                .to = {i, j},
+                .piece = piece,
+                .captured = Piece::EMPTY,
+                .promotion = Piece::EMPTY,
+                .isEnPassant = false,
+                .isCastling = false
+            };
+            movePtr++;
+        }
+
+        i += offsetI;
+        j += offsetJ;
+    }
+
+    return movePtr;
 }

@@ -29,12 +29,12 @@ Board::Board() {
         }
     }
 
-    moveBuffer = new Move[LEGAL_MOVES_BUFFER_MAX];
+    Move moveBuffer[LEGAL_MOVES_BUFFER_MAX];
 }
 
-Board::~Board() {
-    delete[] moveBuffer;
-}
+// Board::~Board() {
+//     delete[] moveBuffer;
+// }
 
 std::vector<Move> Board::getPsuedoMoves() {
     Move* end = ::getPsuedoMoves(*this, moveBuffer, whiteToMove);
@@ -45,20 +45,20 @@ std::vector<Move> Board::getPsuedoMoves() {
 
 std::string getSquareBgEscapeCode(int x, int y) {
     if ((x & 1) == (y & 1)) return "\x1b[48;2;150;75;0m";
-    else {return "\x1b[48;2;196;164;132m";} 
+    else {return "\x1b[48;2;196;164;132m";}
 }
 
 using std::string;
 void Board::loadFen(string fen) {
     std::stringstream data(fen);
-    
+
     string board;
     char color;
     string castleRights;
     string enPassant;
     int halfmoves;
     int fullmoves;
-    
+
     data >> board >> color >> castleRights >> enPassant >> halfmoves >> fullmoves;
 
     // BOARD
@@ -108,7 +108,7 @@ void Board::loadFen(string fen) {
             case 'q': canCastleBq = true; break;
         }
     }
-    
+
     // EN PASSANT
     if (enPassant == "-") {
         enPassantSquare[0] = enPassantSquare[1] = -1;
@@ -119,7 +119,7 @@ void Board::loadFen(string fen) {
 
     // HALFMOVES
     fiftyMoveRuleCounter = halfmoves;
-    
+
     // FULLMOVES
     moves = fullmoves;
 }
@@ -135,7 +135,7 @@ std::ostream& operator<<(std::ostream& os, const Board& obj) {
     }
 
     os << "Side to move: " << (obj.whiteToMove ? "White" : "Black") << "\n";
-    
+
     os << "Castling Rights: ";
     if (obj.canCastleWk) os << "K";
     if (obj.canCastleWq) os << "Q";

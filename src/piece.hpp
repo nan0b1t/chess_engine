@@ -24,6 +24,8 @@ std::string moveToAlgebraic(const Move& move, const Board& board);
 bool canMoveTo(Piece piece, int rankFrom, int fileFrom, int rankTo, int fileTo, const Board &board);
 
 
+std::string moveToUci(const Move& move);
+
 inline bool isPawn(Piece piece) {
     return (piece == Piece::W_PAWN || piece == Piece::B_PAWN);
 }

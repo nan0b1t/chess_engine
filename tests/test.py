@@ -33,7 +33,7 @@ for line in lines:
 
     legal_moves = list(
         [
-            board.san(move).strip("#+") for move in board.pseudo_legal_moves
+            move.uci() for move in board.pseudo_legal_moves
         ]  # remove check/checkmate [FOR NOW]
     )
 

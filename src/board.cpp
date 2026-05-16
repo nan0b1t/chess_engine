@@ -1,5 +1,6 @@
 #include "board.hpp"
 #include "config.hpp"
+#include "eval.hpp"
 #include "move.hpp"
 #include "movegen.hpp"
 #include <cctype>
@@ -22,6 +23,8 @@ Board::Board() {
                                 {Piece::EMPTY,  Piece::EMPTY,    Piece::EMPTY,    Piece::EMPTY,   Piece::EMPTY,  Piece::EMPTY,    Piece::EMPTY,    Piece::EMPTY},
                                 {Piece::W_PAWN, Piece::W_PAWN,   Piece::W_PAWN,   Piece::W_PAWN,  Piece::W_PAWN, Piece::W_PAWN,   Piece::W_PAWN,   Piece::W_PAWN},
                                 {Piece::W_ROOK, Piece::W_KNIGHT, Piece::W_BISHOP, Piece::W_QUEEN, Piece::W_KING, Piece::W_BISHOP, Piece::W_KNIGHT, Piece::W_ROOK}};
+
+    evaluation = Score{0};
 
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
@@ -122,6 +125,8 @@ void Board::loadFen(string fen) {
 
     // FULLMOVES
     moves = fullmoves;
+
+    evaluation = evaluateBoard(*this);
 }
 
 std::ostream& operator<<(std::ostream& os, const Board& obj) {

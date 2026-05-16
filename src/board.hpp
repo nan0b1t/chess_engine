@@ -5,6 +5,7 @@
 #include "piece.hpp"
 #include "move.hpp"
 #include <vector>
+#include "eval.hpp"
 
 struct Board {
     Piece chessboard[8][8] = {}; // will upgrade to bitboard later
@@ -16,6 +17,8 @@ struct Board {
 
     Move* moveBuffer;
     int enPassantSquare[2] = {-1, -1};
+
+    Score evaluation;
 
     Board();
     ~Board();

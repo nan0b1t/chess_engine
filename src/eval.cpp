@@ -1,8 +1,9 @@
-#include "eval.hpp"
 #include "board.hpp"
 #include "config.hpp"
 #include "piece.hpp"
 #include <cstdint>
+
+struct Score;
 
 Score evaluateBoard(const Board& board) {
     int16_t absResult = 0;

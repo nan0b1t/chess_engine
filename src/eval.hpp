@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdint>
-#include "board.hpp"
+struct Board;
 
 struct Score {
     int16_t value;

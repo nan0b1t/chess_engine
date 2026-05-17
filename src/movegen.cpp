@@ -190,7 +190,7 @@ Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
                     }
                 }
 
-                if ((isWhite(piece) && board.canCastleWk) || (!isWhite(piece) && board.canCastleWk)) {
+                if (((isWhite(piece) && board.canCastleWk) || (!isWhite(piece) && board.canCastleWk)) && (i == 0 || i == 7) && (j == 4)) {
                     *moves++ = {
                         .from = {i, j},
                         .to = {i, 6},
@@ -202,7 +202,7 @@ Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
                     };
                 }
 
-                if ((isWhite(piece) && board.canCastleWq) || (!isWhite(piece) && board.canCastleWq)) {
+                if (((isWhite(piece) && board.canCastleWq) || (!isWhite(piece) && board.canCastleWq)) && (i == 0 || i == 7) && (j == 4)) {
                     *moves++ = {
                         .from = {i, j},
                         .to = {i, 2},

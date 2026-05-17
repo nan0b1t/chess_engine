@@ -126,7 +126,8 @@ Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
                 if (board.enPassantSquare[0] == forwardIndex
                     && ((j == board.enPassantSquare[1] - 1) || (j == board.enPassantSquare[1] + 1))) {
                     Piece epTarget = board.chessboard[i][board.enPassantSquare[1]];
-                    if (isCapturable(epTarget, piece) && isPawn(epTarget) && (isCapturable(piece, board.chessboard[board.enPassantSquare[0]][board.enPassantSquare[1]]))) {
+                    Piece epLanding = board.chessboard[board.enPassantSquare[0]][board.enPassantSquare[1]];
+                    if (isPawn(epTarget) && isCapturable(epTarget, piece) && epLanding == Piece::EMPTY) {
                         *moves = { .from = { i, j },
                             .to = { board.enPassantSquare[0], board.enPassantSquare[1] },
                             .piece = piece,
@@ -187,6 +188,30 @@ Move* getPsuedoMoves(const Board& board, Move* moves, bool whiteToPlay)
                             .isCastling = false
                         };
                     }
+                }
+
+                if ((isWhite(piece) && board.canCastleWk) || (!isWhite(piece) && board.canCastleWk)) {
+                    *moves++ = {
+                        .from = {i, j},
+                        .to = {i, 6},
+                        .piece = piece,
+                        .captured = Piece::EMPTY,
+                        .promotion = Piece::EMPTY,
+                        .isEnPassant = false,
+                        .isCastling = true
+                    };
+                }
+
+                if ((isWhite(piece) && board.canCastleWq) || (!isWhite(piece) && board.canCastleWq)) {
+                    *moves++ = {
+                        .from = {i, j},
+                        .to = {i, 2},
+                        .piece = piece,
+                        .captured = Piece::EMPTY,
+                        .promotion = Piece::EMPTY,
+                        .isEnPassant = false,
+                        .isCastling = true
+                    };
                 }
             }
 

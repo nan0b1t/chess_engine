@@ -11,7 +11,7 @@ struct Board {
     Piece chessboard[8][8] = {}; // will upgrade to bitboard later
 
     bool whiteToMove = true;
-    bool canCastleWk, canCastleWq, CanCastleBk, canCastleBq;
+    bool canCastleWk = false, canCastleWq = false, canCastleBk = false, canCastleBq = false;
     int fiftyMoveRuleCounter = 0;
     int moves = 0;
 
@@ -21,7 +21,7 @@ struct Board {
     Score evaluation;
 
     Board();
-    ~Board();
+
     friend std::ostream& operator<<(std::ostream& os, const Board& obj); // so i can cout it
     std::vector<Move> getPsuedoMoves(); // for user friendly stuff, not high-performance internal enigne calculation
     void loadFen(std::string fen);

@@ -14,7 +14,7 @@
 #include <cstring>
 
 Board::Board() {
-    canCastleWk = canCastleWq = CanCastleBk = canCastleBq = false;
+    canCastleWk = canCastleWq = canCastleBk = canCastleBq = false;
     Piece initialChessboard[8][8] = {{Piece::B_ROOK, Piece::B_KNIGHT, Piece::B_BISHOP, Piece::B_QUEEN, Piece::B_KING, Piece::B_BISHOP, Piece::B_KNIGHT, Piece::B_ROOK},
                                 {Piece::B_PAWN, Piece::B_PAWN,   Piece::B_PAWN,   Piece::B_PAWN,  Piece::B_PAWN, Piece::B_PAWN,   Piece::B_PAWN,   Piece::B_PAWN},
                                 {Piece::EMPTY,  Piece::EMPTY,    Piece::EMPTY,    Piece::EMPTY,   Piece::EMPTY,  Piece::EMPTY,    Piece::EMPTY,    Piece::EMPTY},
@@ -32,12 +32,8 @@ Board::Board() {
         }
     }
 
-    Move moveBuffer[LEGAL_MOVES_BUFFER_MAX];
+    moveBuffer = new Move[LEGAL_MOVES_BUFFER_MAX];
 }
-
-// Board::~Board() {
-//     delete[] moveBuffer;
-// }
 
 std::vector<Move> Board::getPsuedoMoves() {
     Move* end = ::getPsuedoMoves(*this, moveBuffer, whiteToMove);
@@ -102,12 +98,12 @@ void Board::loadFen(string fen) {
     }
 
     // CASTLE RIGHTS
-    canCastleWk = canCastleWq = CanCastleBk = canCastleBq = false;
+    canCastleWk = canCastleWq = canCastleBk = canCastleBq = false;
     for (char c : castleRights) {
         switch (c) {
             case 'K': canCastleWk = true; break;
             case 'Q': canCastleWq = true; break;
-            case 'k': CanCastleBk = true; break;
+            case 'k': canCastleBk = true; break;
             case 'q': canCastleBq = true; break;
         }
     }
@@ -144,9 +140,9 @@ std::ostream& operator<<(std::ostream& os, const Board& obj) {
     os << "Castling Rights: ";
     if (obj.canCastleWk) os << "K";
     if (obj.canCastleWq) os << "Q";
-    if (obj.CanCastleBk) os << "k";
+    if (obj.canCastleBk) os << "k";
     if (obj.canCastleBq) os << "q";
-    if (!(obj.canCastleWk || obj.canCastleWq || obj.CanCastleBk || obj.canCastleBq)) os << "-";
+    if (!(obj.canCastleWk || obj.canCastleWq || obj.canCastleBk || obj.canCastleBq)) os << "-";
     os << "\n";
 
     os << "En Passant: ";
